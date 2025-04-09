@@ -56,6 +56,15 @@ public class PlayerController : Singleton<PlayerController>
     // TODO: Make it easier to read
     void FixedUpdate()
     {
+        if(_isRunning)
+        {
+            _speed = _runSpeed;
+        }
+        else if(!_isRunning)
+        {
+            _speed = _walkSpeed;
+        }
+        _speed = _isRunning ? _runSpeed : _walkSpeed;
         Vector3 movement = new Vector3(_movementInput.x, 0, _movementInput.y);
         movement *= _speed * 0.1f;
         transform.Translate(movement, Space.Self);
@@ -77,11 +86,16 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
-private void OnCllisionEnter(Collision collision)
+private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.TryGetComponent<Coin>(out Coin coin))
         {
             coin.Collect();
+            Debug.Log("$Kep leaw");
         }
     }
+    // public void DebugCurrentMoney()
+    // {
+    //     Debug.Log("$Current Money: {_money}");
+    // }
 }
