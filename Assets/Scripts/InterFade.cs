@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 public class InterFade : MonoBehaviour
 {
    [SerializeField] private CanvasGroup _canvasGroup;
@@ -25,10 +26,11 @@ public class InterFade : MonoBehaviour
     yield return new WaitForSeconds(0.5f);
     Debug.Log("Fade");
    }
+   [ContextMenu("Toggle Ui")]
    public void ToggleUI()
    {
     _isShown = !_isShown;
-
-    StartCoroutine(Fade());
+    _canvasGroup.Fade(_isShown);
+    // StartCoroutine(Fade());
    }
 }
