@@ -1,30 +1,40 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : Singleton<PlayerController>
+public class PlayerController : Character
 {
     //TODO: Attributes
     [ Header("Component")]
-    public Animator _animator;
-    [Range(0.1f,5.0f), Tooltip("It a walk speed")]public float _walkSpeed = 1f;
-    public float _runSpeed = 2f;
-    [Space(10)]
-    public float _jumpForce = 10f;
-    [SerializeField] private Rigidbody _rigidbody;
 
     private Vector2 _movementInput;
-    private float _speed;
-    private bool _isRunning = false;
-
+   
     #region Input System
     private InputSystem_Actions _input;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _input = new InputSystem_Actions();
-
-        _speed = _walkSpeed;
     }
+    private static PlayerController _instance;
+	public static PlayerController Instance {
+		get {
+			if (_instance == null) {
+				var objs = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
+				if (objs.Length > 0)
+					_instance = objs[0];
+				if (objs.Length > 1) {
+					Debug.LogError ("There is more than one " + typeof(PlayerController).Name + " in the scene.");
+				}
+				if (_instance == null) {
+					GameObject obj = new GameObject ();
+					obj.hideFlags = HideFlags.HideAndDontSave;
+					_instance = obj.AddComponent<PlayerController> ();
+				}
+			}
+			return _instance;
+		}
+	}
 
     void OnEnable()
     {
